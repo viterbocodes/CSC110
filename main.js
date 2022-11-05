@@ -38,9 +38,6 @@ async function loadFile(url) {
       return null;
     }
   }
-
-
-  
 function load(){
     let a = loadFile('https://raw.githubusercontent.com/viterbocodes/CSC110/main/Deposits.csv');
 }
