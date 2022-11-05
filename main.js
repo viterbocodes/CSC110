@@ -38,7 +38,7 @@ async function loadFileAndPrintToConsole(url) {
     }
   }
 function load(){
-    loadFileAndPrintToConsole('main.js');
+    loadFileAndPrintToConsole('https://github.com/viterbocodes/CSC110/blob/main/Deposits.csv');
 }
 
 
