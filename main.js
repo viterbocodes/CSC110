@@ -27,33 +27,17 @@ function csvToArray(str, delimiter = ",") {
   // return the array
   return arr;
 }
-
-async function loadFileAndPrintToConsole(url) {
+async function loadFile(url) {
     try {
       const response = await fetch(url);
       const data = await response.text();
-      console.log(data);
+      return csvToArray(data);
+
     } catch (err) {
       console.error(err);
+      return null;
     }
   }
 function load(){
-    loadFileAndPrintToConsole('https://github.com/viterbocodes/CSC110/blob/main/Deposits.csv');
+    let a = loadFile('https://raw.githubusercontent.com/viterbocodes/CSC110/main/Deposits.csv');
 }
-
-
-if(myForm){
-    myForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const input = csvFile.files[0];
-        const reader = new FileReader();
-      
-        reader.onload = function (e) {
-          const text = e.target.result;
-          const data = csvToArray(text);
-          document.write(JSON.stringify(data));
-        };
-        
-        reader.readAsText(input);
-      });
-  }
