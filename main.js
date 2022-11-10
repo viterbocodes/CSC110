@@ -1,43 +1,63 @@
+class MakeTodoList {
+  constructor(list) {
+    this.id = '';
+    this.todos = [];
+  }
 
+  toJSON() {
+		console.log("to json");
+		return(      
+      JSON.stringify(this.todos.slice()));
+	}
 
-function csvToArray(str, delimiter = ",") {
-
-  // slice from start of text to the first \n index
-  // use split to create an array from string by delimiter
-  const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
-
-  // slice from \n index + 1 to the end of the text
-  // use split to create an array of each csv value row
-  const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-
-  // Map the rows
-  // split values from each row into an array
-  // use headers.reduce to create an object
-  // object properties derived from headers:values
-  // the object passed as an element of the array
-  const arr = rows.map(function (row) {
-    const values = row.split(delimiter);
-    const el = headers.reduce(function (object, header, index) {
-      object[header] = values[index];
-      return object;
-    }, {});
-    return el;
+  serialize() {
+    $.ajax({
+      type: 'GET',
+      url: '/',
+      dataType: 'json',
+      processData: false,
+      data: self.toJSON,
+      success: function(resp){
+          console.log(resp);
+      }
   });
 
-  // return the array
-  return arr;
-}
-async function loadFile(url) {
-    try {
-      const response = await fetch(url);
-      const data = await response.text();
-      return csvToArray(data);
-
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
   }
-function load(){
-    let a = loadFile('https://raw.githubusercontent.com/viterbocodes/CSC110/main/Deposits.csv');
+
+  addTodo(text) {
+    this.todos.push(text);
+  }
+
+  get getList() {
+    return this._todos;
+  }
+
 }
+
+$(document).ready(function() {
+  let listEle = new MakeTodoList(list);
+  $("#save").click(function(event){
+    alert("Thanks for saving!");
+    console.log("saved");
+    listEle.serialize();
+  });
+
+
+  $("#add").click(function(event){
+    var text = $('#input').val();
+    listEle.addTodo(text);
+    //let list = document.getElementById("todo-list");
+    //var li = document.createElement("li");
+    $("#todo-list").append('<li>' +  text + '</li>');
+    //li.textContent = text;
+    //list.appendChild(li);
+    //let input = document.getElementById("input").value;
+  });
+
+
+  
+
+
+
+   
+});
