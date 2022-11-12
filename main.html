@@ -24,29 +24,4 @@
     <button id="add">Add</button>
     <a href="#" id ="save" >Save</a>
   </body>
-  <script>
-    let list = document.getElementById("todo-list");
-
-    // create a object of Class
-
-    let listEle = new MakeTodoList(list);
-
-    listEle.DummyData = ["Play FootBall", "Do Homework"]; // setter method for Dummy Data
-
-    console.log("current  ...........", listEle.getList); //   getter method
-
-    // add something to list
-
-   
-    // simple utility function
-
-    function getEventTarget(e) {
-      e = e || window.event;
-      return e.target || e.srcElement;
-    }
-
-    // delete some item from list
-
-
-  </script>
 </html>
