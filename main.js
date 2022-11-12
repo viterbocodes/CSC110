@@ -10,9 +10,12 @@ function newObjectId() {
 
 class Game {
   constructor(id,title,players,timestamp, owner) {
-    if (this.id  === undefined){
+    if (id  === undefined || id  === null  ){
       this.id = newObjectId();
-    } 
+    }
+    else{
+      this.id = id;
+    }
     if (title != undefined && title !== null ){
       this.title = title;
     } 
@@ -20,7 +23,7 @@ class Game {
       this.date = new  Date();
     } 
     if (owner != undefined && owner != null ){
-      this.owner = new  owner;
+      this.owner = owner;
     } 
     if (players === undefined || players === null ){
       this.players = [];
@@ -41,34 +44,35 @@ class Game {
     let player_ids = this.players.map(({ id }) => id)
 		return(      
       /// multiple values example = [this.description,this.todos]
-      JSON.stringify({title:this.title,date:this.date.toISOString(),owner:this.owner,players:player_ids})
+      JSON.stringify({title:this.title,date: !!this.date ? this.date.toISOString() : '',owner:this.owner,players:player_ids})
     )
 	}
   deserialize(){
     $.ajax({
       type: 'POST',
       url: 'http://vitcs.us:5000/get_game/'+ this.id,
-      dataType: 'json',
       async: false,
       contentType: "application/json; charset=utf-8",
-      data: obj
     })
     .done(function(data) {
       // If successful
+      let obj = JSON.parse(data);
       let players=[];
-      data.players.forEach(function (item, index) {
+      obj.players.forEach(function (item, index) {
         console.log(item, index);
         $.ajax({
           type: 'POST',
-          url: 'http://vitcs.us:5000/get_player/'+ item.email,
-          dataType: 'json',
+          url: 'http://vitcs.us:5000/get_player/'+ item,
           async: false,
           contentType: "application/json; charset=utf-8",
           data: obj,
           success: function(resp){
               console.log(resp);
-              let player2 = new Player(null,resp.name,resp.email,1);
-              players.push(player);
+              if(obj!==null){
+                let player = new Player(null,resp.name,resp.email,1);
+                players.push(player);
+              }
+              
           }
         });
       });
@@ -114,10 +118,15 @@ class Player {
   }
   toJSON() {
 		console.log("to json");
-		return({name:this.name,email:this.email,active:this.active});
+    var obj = new Object();
+    obj.name = this.name;
+    obj.email  = this.email;
+    obj.active= this.active;
+		return(JSON.stringify(obj));
 	}
   serialize() {
     let obj = this.toJSON();
+    console.log(obj);
     $.ajax({
       type: 'POST',
       url: 'http://vitcs.us:5000/add_player/'+ this.id,
@@ -143,9 +152,10 @@ $(document).ready(function() {
   players.push(player2);
   players.push(player3);
   players.push(player4);
-  let Game1 = new Game(null,"gamde",players,'2022-07-21T09:35:31.820Z','james1@yahoo.com')
-  Game1.serialize();
-  
+  //let Game1 = new Game(null,"gamde",players,'2022-07-21T09:35:31.820Z','james1@yahoo.com')
+  //Game1.serialize();
+  g1 = new Game('636fbdae4637cc1d2107088c?636fe0cd29558490d48e24f9');
+  g1.deserialize();
  /* $("#save").click(function(event){
     alert("Thanks for saving!");
     console.log("saved");
