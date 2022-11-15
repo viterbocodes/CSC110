@@ -39,6 +39,10 @@ class Game {
     }
   }
 
+  getID() {
+		return this.id;
+	}
+
   toJSON() {
 		console.log("to json");
     let player_ids = this.players.map(({ id }) => id)
@@ -142,20 +146,31 @@ class Player {
 }
 
 $(document).ready(function() {
-  let player1 = new Player(null,"james1",'james1@yahoo.com',1);
-  player1.serialize();
-  let player2 = new Player(null,"james2",'james2@yahoo.com',1);
-  let player3 = new Player(null,"james3",'james3@yahoo.com',1);
-  let player4 = new Player(null,"james4",'james4@yahoo.com',1);
-  let players = new Array();
-  players.push(player1);
-  players.push(player2);
-  players.push(player3);
-  players.push(player4);
+  let players=[];
+  $("form").submit(function (event) {
+    let player1 = new Player(null,$("#name").val(),$("#email").val(),1);
+    player1.serialize();
+    players.push(player1);
+    event.preventDefault();
+    $(".main_al").html("Player Created");
+    $(".main_al").show().delay(5000).fadeOut();
+  });
+
+  $("#add_gr").click(function(){
+    //alert("button");
+    let Game1 = new Game(null,"gamde",players,'2022-07-21T09:35:31.820Z','james1@yahoo.com')
+    Game1.serialize();
+    $(".main_al").html("Game Created");
+    $(".main_al").show().delay(5000).fadeOut();
+  });
+
+  //create game
   //let Game1 = new Game(null,"gamde",players,'2022-07-21T09:35:31.820Z','james1@yahoo.com')
   //Game1.serialize();
-  g1 = new Game('636fbdae4637cc1d2107088c?636fe0cd29558490d48e24f9');
-  g1.deserialize();
+
+  //load game
+  //g1 = new Game('636fbdae4637cc1d2107088c?636fe0cd29558490d48e24f9');
+  //g1.deserialize();
  /* $("#save").click(function(event){
     alert("Thanks for saving!");
     console.log("saved");
